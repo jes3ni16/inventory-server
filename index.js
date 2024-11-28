@@ -2,11 +2,15 @@ const express = require('express')
 const app = express()
 const cors = require('cors');
 
-const port = 3000
+
 const mongoose = require('mongoose');
 const itemRoutes = require("./routes/item.route")
 const tableRoutes = require('./routes/table.route');
 const transactionRoutes = require('./routes/transaction.route');
+require('dotenv').config();
+
+const port = process.env.PORT || 3000;  // Use the PORT from the environment variable, fallback to 3000 if not set
+const mongoURI = process.env.MONGO_URI; 
 
 app.use(express.json())
 
@@ -28,7 +32,7 @@ app.get('/', (req, res) => {
   })
 
 
-  mongoose.connect("mongodb+srv://cenixInventory:cenixInventory@inventory.vhw5z.mongodb.net/?retryWrites=true&w=majority&appName=inventory")
+  mongoose.connect(mongoURI)
   .then(()=>{
     console.log('database connected')
   })
