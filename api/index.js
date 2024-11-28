@@ -4,9 +4,9 @@ const cors = require('cors');
 
 
 const mongoose = require('mongoose');
-const itemRoutes = require("./routes/item.route")
-const tableRoutes = require('./routes/table.route');
-const transactionRoutes = require('./routes/transaction.route');
+const itemRoutes = require("../routes/item.route")
+const tableRoutes = require('../routes/table.route');
+const transactionRoutes = require('../routes/transaction.route');
 require('dotenv').config();
 
 const port = process.env.PORT || 3000;  // Use the PORT from the environment variable, fallback to 3000 if not set
