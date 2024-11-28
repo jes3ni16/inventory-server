@@ -54,8 +54,6 @@ const updateTable = async (req, res) => {
     const { name, location, employee } = req.body;
     const tableId = req.params.id;
 
-    console.log('Received PUT request to update table with ID:', tableId);  // Log the table ID
-
     // Find the table by ID and update it
     const table = await Table.findByIdAndUpdate(
       tableId,
@@ -64,14 +62,11 @@ const updateTable = async (req, res) => {
     );
 
     if (!table) {
-      console.error('Table not found for update with ID:', tableId);  // Log if table not found
       return res.status(404).json({ message: 'Table not found' });
     }
-    
-    console.log('Updated table:', table);  // Log the updated table
+  
     res.status(200).json(table);  // Return the updated table
   } catch (error) {
-    console.error('Error updating table:', error);  // Log the error
     res.status(500).json({ message: 'Error updating table', error: error.message });
   }
 };

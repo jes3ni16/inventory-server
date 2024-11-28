@@ -6,10 +6,10 @@ const ItemSchema = mongoose.Schema({
             required : [true, 'item name is required']
         },
 
-        quantity: {
-            type : Number,
-            default:0
-        },
+      sku: {
+        type: String,
+        unique: [true, 'Already existed']
+      },
 
         description :{
             type: String,
