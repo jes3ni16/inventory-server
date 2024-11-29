@@ -24,14 +24,25 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-// MongoDB connection (make sure to avoid reconnecting on every request)
-mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('Database connected');
-  })
-  .catch((err) => {
-    console.error('Connection failed', err);
-  });
+let isConnected = false; // Track connection status
 
+const connectToDatabase = async () => {
+  if (isConnected) {
+    console.log('Using existing database connection');
+    return;
+  }
+  
+  try {
+    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    isConnected = true;
+    console.log('Database connected');
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    throw error;
+  }
+};
+
+// Call the database connection function before processing requests
+connectToDatabase();
 // Export the app as a serverless function for Vercel
 module.exports = app;
