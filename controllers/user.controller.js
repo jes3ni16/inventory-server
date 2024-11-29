@@ -1,6 +1,7 @@
 // controllers/authController.js
 
 const User = require('../models/user.model');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const registerUser = async (req, res) => {
@@ -21,25 +22,36 @@ const registerUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
-  const { username, password } = req.body;
+app.post('/api/auth/login', async (req, res) => {
+    const { username, password } = req.body;
 
-  try {
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+    try {
+      // 1. Find the user by username
+      const user = await User.findOne({ username });
+      if (!user) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+  
+      // 2. Compare the password with the hashed password stored in DB
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+  
+      // 3. Create a JWT token after successful authentication
+      const token = jwt.sign(
+        { userId: user._id, username: user.username },
+        process.env.JWT_SECRET_KEY,  // Ensure this is in your environment variables
+        { expiresIn: '1h' }  // Optional: set token expiration
+      );
+  
+      // 4. Send the token to the client
+      res.json({ token });
+  
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ error: 'Server error, please try again later.' });
     }
-
-    const isMatch = await user.comparePassword(password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-};
+  });
 
 module.exports = { registerUser, loginUser };
