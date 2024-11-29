@@ -14,7 +14,11 @@ const mongoURI = process.env.MONGO_URI;
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://your-frontend-domain.com', // Allow your frontend domain
+  methods: ['GET', 'POST','PATCH','PUT','DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 // Routes
 app.use("/api/items", itemRoutes);
