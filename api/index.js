@@ -34,3 +34,5 @@ app.get('/', (req, res) => {
   .catch(() => {
     console.log('Connection Failed')
   })
+
+  module.exports = app;
