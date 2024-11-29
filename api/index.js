@@ -1,38 +1,37 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 const cors = require('cors');
-
-
 const mongoose = require('mongoose');
-const itemRoutes = require("../routes/item.route")
+const itemRoutes = require("../routes/item.route");
 const tableRoutes = require('../routes/table.route');
 const transactionRoutes = require('../routes/transaction.route');
 require('dotenv').config();
 
-const port = process.env.PORT || 3000;  // Use the PORT from the environment variable, fallback to 3000 if not set
-const mongoURI = process.env.MONGO_URI; 
+// MongoDB connection string
+const mongoURI = process.env.MONGO_URI;
 
-app.use(express.json())
-
+// Middleware
+app.use(express.json());
 app.use(cors());
 
-app.use("/api/items", itemRoutes)
-app.use("/api/tables", tableRoutes); 
+// Routes
+app.use("/api/items", itemRoutes);
+app.use("/api/tables", tableRoutes);
 app.use("/api/transactions", transactionRoutes);
 
-
+// Simple test route
 app.get('/', (req, res) => {
-    res.send('Hello World!')
-  }),
+  res.send('Hello World!');
+});
 
-
-
-  mongoose.connect(mongoURI)
-  .then(()=>{
-    console.log('database connected')
+// MongoDB connection (make sure to avoid reconnecting on every request)
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Database connected');
   })
-  .catch(() => {
-    console.log('Connection Failed')
-  })
+  .catch((err) => {
+    console.error('Connection failed', err);
+  });
 
-  module.exports = app;
+// Export the app as a serverless function for Vercel
+module.exports = app;
