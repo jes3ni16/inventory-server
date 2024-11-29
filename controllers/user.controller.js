@@ -22,36 +22,36 @@ const registerUser = async (req, res) => {
   }
 };
 
-app.post('/api/auth/login', async (req, res) => {
-    const { username, password } = req.body;
+const loginUser = async (req, res) => {
+  const { username, password } = req.body;
 
-    try {
-      // 1. Find the user by username
-      const user = await User.findOne({ username });
-      if (!user) {
-        return res.status(401).json({ error: 'Invalid credentials' });
-      }
-  
-      // 2. Compare the password with the hashed password stored in DB
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        return res.status(401).json({ error: 'Invalid credentials' });
-      }
-  
-      // 3. Create a JWT token after successful authentication
-      const token = jwt.sign(
-        { userId: user._id, username: user.username },
-        process.env.JWT_SECRET_KEY,  // Ensure this is in your environment variables
-        { expiresIn: '1h' }  // Optional: set token expiration
-      );
-  
-      // 4. Send the token to the client
-      res.json({ token });
-  
-    } catch (error) {
-      console.error('Login error:', error);
-      res.status(500).json({ error: 'Server error, please try again later.' });
+  try {
+    // 1. Find the user by username
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
-  });
+
+    // 2. Compare the password with the hashed password stored in DB
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // 3. Create a JWT token after successful authentication
+    const token = jwt.sign(
+      { userId: user._id, username: user.username },
+      process.env.JWT_SECRET,  // Ensure this is consistent with the registration endpoint
+      { expiresIn: '1h' }  // Optional: set token expiration
+    );
+
+    // 4. Send the token to the client
+    res.json({ token });
+
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Server error, please try again later.' });
+  }
+};
 
 module.exports = { registerUser, loginUser };
