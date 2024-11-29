@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-let isConnected = false; // Track connection status
+let isConnected = false;
 
 const connectToDatabase = async () => {
   if (isConnected) {
@@ -33,7 +33,7 @@ const connectToDatabase = async () => {
   }
   
   try {
-    await mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    await mongoose.connect(process.env.MONGO_URI);
     isConnected = true;
     console.log('Database connected');
   } catch (error) {
@@ -42,7 +42,6 @@ const connectToDatabase = async () => {
   }
 };
 
-// Call the database connection function before processing requests
 connectToDatabase();
 // Export the app as a serverless function for Vercel
 module.exports = app;
