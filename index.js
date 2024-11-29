@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const itemRoutes = require("./routes/item.route");
 const tableRoutes = require('./routes/table.route');
 const transactionRoutes = require('./routes/transaction.route');
+const authRoutes = require('./routes/user.route');
 require('dotenv').config();
 
 
@@ -19,6 +20,7 @@ app.use(cors());
 app.use("/api/items", itemRoutes);
 app.use("/api/tables", tableRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use('/api/auth', authRoutes);
 
 // Simple test route
 app.get('/', (req, res) => {
@@ -42,6 +44,10 @@ const connectToDatabase = async () => {
     throw error;
   }
 };
+
+// app.listen(3000, () => {
+//   console.log(`Server running on port 3000`);
+// });
 
 connectToDatabase();
 // Export the app as a serverless function for Vercel
