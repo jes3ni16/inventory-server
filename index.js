@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
-const itemRoutes = require("../routes/item.route");
-const tableRoutes = require('../routes/table.route');
-const transactionRoutes = require('../routes/transaction.route');
+const itemRoutes = require("./routes/item.route");
+const tableRoutes = require('./routes/table.route');
+const transactionRoutes = require('./routes/transaction.route');
 require('dotenv').config();
 
 // MongoDB connection string
