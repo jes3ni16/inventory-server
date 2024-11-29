@@ -6,6 +6,16 @@ const itemRoutes = require("./routes/item.route");
 const tableRoutes = require('./routes/table.route');
 const transactionRoutes = require('./routes/transaction.route');
 require('dotenv').config();
+const redis = require('redis');
+const client = redis.createClient();
+
+client.set('key', 'some value', 'EX', 3600);  // EX is the expiration time in seconds
+
+// Get data from Redis cache
+client.get('key', (err, result) => {
+  if (err) throw err;
+  console.log(result); // "some value"
+});
 
 // MongoDB connection string
 const mongoURI = process.env.MONGO_URI;
