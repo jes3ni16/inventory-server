@@ -15,7 +15,7 @@ const mongoURI = process.env.MONGO_URI;
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: 'http://your-frontend-domain.com', // Allow your frontend domain
+  origin: '*', // Allow your frontend domain
   methods: ['GET', 'POST','PATCH','PUT','DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
@@ -49,9 +49,6 @@ const connectToDatabase = async () => {
   }
 };
 
-// app.listen(3000, () => {
-//   console.log(`Server running on port 3000`);
-// });
 
 connectToDatabase();
 // Export the app as a serverless function for Vercel
