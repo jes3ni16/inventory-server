@@ -1,6 +1,7 @@
 
 const Item = require('../models/item.model');
 const Table = require('../models/table.model');
+const AuditLog = require('../models/transaction.model')
 
 const getItems = async (req, res) => {
   try {
@@ -63,23 +64,33 @@ const getItems = async (req, res) => {
 
   const updateItem = async (req, res) => {
     try {
+      // Update the item using the item ID from the request params
       const updatedItem = await Item.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        { new: true }  // This ensures the updated document is returned
+        req.params.id,   // ID from URL params
+        req.body,         // Data from the request body
+        { new: true }     // Ensures the updated document is returned
       );
+  
       if (!updatedItem) {
+        // If no item is found with the given ID, return a 404 error
         return res.status(404).json({ message: 'Item not found' });
       }
+  
+      // Log the update action to the AuditLog
       await AuditLog.create({
         action: 'update',
         model: 'Item',
         modelId: updatedItem._id,
-        user: req.user._id, // Now req.user is attached by the middleware
+        user: req.user._id, // Attach the user who performed the action
       });
-      res.json(updatedItem);  // Send back the updated item as the response
+  
+      // Send the updated item as a response
+      res.json(updatedItem); 
+  
     } catch (error) {
-      res.status(500).send('Server Error');
+      // If an error occurs, log the error and return a 500 server error
+      console.error('Error updating item:', error);
+      res.status(500).json({ message: 'Server Error', error: error.message });
     }
   };
 
