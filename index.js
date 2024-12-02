@@ -18,6 +18,7 @@ app.use(cors({
   origin: '*', // Allow your frontend domain
   methods: ['GET', 'POST','PATCH','PUT','DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, 
 }));
 
 
