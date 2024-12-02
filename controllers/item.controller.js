@@ -24,22 +24,19 @@ const getItems = async (req, res) => {
 
   const createItem = async (req, res) => {
     try {
-      const newItem = new Item(req.body); // Create new item from the request body
+      const newItem = new Item(req.body);
       await newItem.save();
-  
-      // Create an audit log entry after saving the item
       await AuditLog.create({
         action: 'create',
         model: 'Item',
         modelId: newItem._id,
-        user: req.user._id, // Attach the user from the decoded JWT
+        user: req.user._id, // Assuming req.user is correctly set from middleware
       });
   
-      // Send the new item as the response
-      res.status(201).json(newItem);
-    } catch (error) {
-      console.error('Error adding item:', error);
-      res.status(500).json({ message: 'Error adding item' });
+      res.status(201).json(newItem); // Return the newly added item
+    } catch (err) {
+      console.error("Error creating item:", err); // Detailed logging
+      res.status(500).json({ message: 'Error adding item', error: err.message });
     }
   };
   
