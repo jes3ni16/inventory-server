@@ -6,6 +6,8 @@ const itemRoutes = require("./routes/item.route");
 const tableRoutes = require('./routes/table.route');
 const transactionRoutes = require('./routes/transaction.route');
 const authRoutes = require('./routes/user.route');
+const jwt = require('jsonwebtoken');
+const User = require('../models/user.model');
 require('dotenv').config();
 
 
@@ -19,6 +21,7 @@ app.use(cors({
   methods: ['GET', 'POST','PATCH','PUT','DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 
 // Routes
 app.use("/api/items", itemRoutes);

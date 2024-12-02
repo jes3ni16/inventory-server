@@ -25,6 +25,12 @@ const getItems = async (req, res) => {
     try {
       const newItem = new Item(req.body);
       await newItem.save();
+      await AuditLog.create({
+        action: 'create',
+        model: 'Item',
+        modelId: newItem._id,
+        user: req.user._id, // Now req.user is attached by the middleware
+      });
       res.status(201).json(newItem); // Return the newly added item
     } catch (err) {
       res.status(500).json({ message: 'Error adding item' });
@@ -65,6 +71,12 @@ const getItems = async (req, res) => {
       if (!updatedItem) {
         return res.status(404).json({ message: 'Item not found' });
       }
+      await AuditLog.create({
+        action: 'update',
+        model: 'Item',
+        modelId: updatedItem._id,
+        user: req.user._id, // Now req.user is attached by the middleware
+      });
       res.json(updatedItem);  // Send back the updated item as the response
     } catch (error) {
       res.status(500).send('Server Error');
@@ -75,11 +87,19 @@ const getItems = async (req, res) => {
   const deleteItem = async(req, res) => {
     try{
       const {id} = req.params;
-      const item = await Item.findByIdAndDelete(id, req.body);
-      
+      const item = await Item.findById(id);
       if(!item){
         return res.status(404).json({message: error.message})
       }
+      await AuditLog.create({
+        action: 'delete',
+        model: 'Item',
+        modelId: item._id,
+        user: req.user._id, // Now req.user is attached by the middleware
+      });
+  await Item.findByIdAndDelete(id, req.body);
+      
+
       res.status(200).json({message: "item successfully deleted"});
 
     }catch(error){

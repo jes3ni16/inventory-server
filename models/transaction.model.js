@@ -1,18 +1,32 @@
-// models/Transaction.js
 const mongoose = require('mongoose');
 
-const transactionSchema = new mongoose.Schema({
-  tableId: { type: mongoose.Schema.Types.ObjectId, ref: 'Table', required: true },
-  items: [
-    { 
-      itemId: { type: mongoose.Schema.Types.ObjectId, ref: 'Item', required: true },
-      quantity: { type: Number, required: true }
-    }
-  ],
-  totalAmount: { type: Number, required: true },
-  createdAt: { type: Date, default: Date.now }
+const auditLogSchema = new mongoose.Schema({
+  action: {
+    type: String,
+    enum: ['create', 'update', 'delete'], // Actions to track
+    required: true,
+  },
+  model: {
+    type: String,
+    enum: ['Item', 'Table'], // Models to track
+    required: true,
+  },
+  modelId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    refPath: 'model', // Reference the model dynamically (Item or Table)
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', // Reference to the user who performed the action
+    required: true,
+  },
+  timestamp: {
+    type: Date,
+    default: Date.now, // Timestamp of the transaction
+  },
 });
 
-const Transaction = mongoose.model('Transaction', transactionSchema);
+const AuditLog = mongoose.model('AuditLog', auditLogSchema);
 
-module.exports = Transaction;
+module.exports = AuditLog;

@@ -1,19 +1,20 @@
 const express = require('express')
 const app = express();
 const router = express.Router();
+const authenticateUser = require('../middlewares/authMiddleware');
 
 const {getItems, createItem, getItem, updateItem, deleteItem ,stockOutItem} = require("../controllers/item.controller")
 
 
 router.get('/',getItems)
 
-  router.post('/', createItem )
+  router.post('/',authenticateUser, createItem )
 
   router.get('/:id' ,getItem)
 
-  router.patch('/:id', updateItem )
+  router.patch('/:id',authenticateUser, updateItem )
 
-  router.delete('/:id', deleteItem)
+  router.delete('/:id', authenticateUser,deleteItem)
 
   router.put('/items/:id/stock-out', stockOutItem);
 
