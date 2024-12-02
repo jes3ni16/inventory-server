@@ -26,15 +26,18 @@ const getItems = async (req, res) => {
     try {
       const newItem = new Item(req.body);
       await newItem.save();
+  
+      // Create an audit log
       await AuditLog.create({
         action: 'create',
         model: 'Item',
         modelId: newItem._id,
-        user: req.user._id, // Now req.user is attached by the middleware
+        user: req.user._id, // Attach the user who performed the action
       });
-      console.log(auditLog);
-      res.status(201).json(newItem); // Return the newly added item
+  
+      res.status(201).json(newItem); // Send the newly created item as the response
     } catch (err) {
+      console.error('Error creating item:', err);
       res.status(500).json({ message: 'Error adding item' });
     }
   };
