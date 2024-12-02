@@ -23,34 +23,38 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { username, password } = req.body;
+  if (req.method === 'POST') {
+    const { username, password } = req.body;
 
-  try {
-    // 1. Find the user by username
-    const user = await User.findOne({ username });
-    if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' });
+    try {
+      // 1. Find the user by username
+      const user = await User.findOne({ username });
+      if (!user) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      // 2. Compare the password with the hashed password stored in DB
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      // 3. Create a JWT token after successful authentication
+      const token = jwt.sign(
+        { userId: user._id, username: user.username },
+        process.env.JWT_SECRET, // Ensure this is set in your environment variables
+        { expiresIn: '1h' } // Optional: set token expiration
+      );
+
+      // 4. Send the token to the client
+      res.json({ token });
+
+    } catch (error) {
+      console.error('Login error:', error); // Log error for debugging
+      res.status(500).json({ error: 'Server error, please try again later.' });
     }
-
-    // 2. Compare the password with the hashed password stored in DB
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-
-    // 3. Create a JWT token after successful authentication
-    const token = jwt.sign(
-      { userId: user._id, username: user.username },
-      process.env.JWT_SECRET,  // Ensure this is consistent with the registration endpoint
-      { expiresIn: '1h' }  // Optional: set token expiration
-    );
-
-    // 4. Send the token to the client
-    res.json({ token });
-
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ error: 'Server error, please try again later.' });
+  } else {
+    res.status(405).json({ error: 'Method Not Allowed' }); // Handle other HTTP methods
   }
 };
 
