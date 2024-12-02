@@ -32,6 +32,7 @@ const getItems = async (req, res) => {
         modelId: newItem._id,
         user: req.user._id, // Now req.user is attached by the middleware
       });
+      console.log(auditLog);
       res.status(201).json(newItem); // Return the newly added item
     } catch (err) {
       res.status(500).json({ message: 'Error adding item' });
