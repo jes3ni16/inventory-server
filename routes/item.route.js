@@ -12,7 +12,7 @@ router.get('/',getItems)
 
   router.get('/:id' ,getItem)
 
-  router.put('/:id', updateItem )
+  router.patch('/:id', updateItem )
 
   router.delete('/:id', deleteItem)
 
