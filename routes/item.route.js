@@ -13,9 +13,9 @@ router.get('/',getItems)
 
   router.get('/:id' ,getItem)
 
-  router.patch('/:id', updateItem )
+  router.patch('/:id',authenticateUser, updateItem )
 
-  router.delete('/:id', deleteItem)
+  router.delete('/:id',authenticateUser, deleteItem)
 
   router.put('/items/:id/stock-out', stockOutItem);
 
