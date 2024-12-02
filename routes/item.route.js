@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express();
+const authenticateUser = require('../middlewares/authMiddleware');
 const router = express.Router();
 
 
@@ -8,7 +9,7 @@ const {getItems, createItem, getItem, updateItem, deleteItem ,stockOutItem} = re
 
 router.get('/',getItems)
 
-  router.post('/', createItem )
+  router.post('/', authenticateUser,createItem )
 
   router.get('/:id' ,getItem)
 
