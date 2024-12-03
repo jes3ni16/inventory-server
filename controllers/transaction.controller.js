@@ -19,4 +19,4 @@ const getAllTransactions = async (req, res) => {
 
 
 
-module.exports = { createTransaction, getAllTransactions, getTransactionsByTable, getTransactionById };
+module.exports = {  getAllTransactions};
