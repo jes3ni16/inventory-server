@@ -8,7 +8,6 @@ const ItemSchema = mongoose.Schema({
 
       sku: {
         type: String,
-        unique: [true, 'Already existed']
       },
 
         description :{

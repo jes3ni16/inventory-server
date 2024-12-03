@@ -49,8 +49,7 @@ const getItems = async (req, res) => {
         return res.status(400).json({ message: 'Item ID is required' });
       }
 
-      
-  
+    
       // Fetch a specific item by its ID without populating the assigned_to field
       const item = await Item.findById(id).exec();
       
