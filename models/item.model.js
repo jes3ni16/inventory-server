@@ -7,6 +7,7 @@ const ItemSchema = mongoose.Schema({
         },
       sku: {
         type: String,
+        required: false,
       },
 
         description :{
