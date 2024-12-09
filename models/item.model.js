@@ -5,7 +5,6 @@ const ItemSchema = mongoose.Schema({
             type: String,
             required : [true, 'item name is required']
         },
-
       sku: {
         type: String,
       },

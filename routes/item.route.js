@@ -9,7 +9,7 @@ const {getItems, createItem, getItem, updateItem, deleteItem ,stockOutItem} = re
 
 router.get('/',getItems)
 
-  router.post('/', authenticateUser,createItem )
+  router.post('/', authenticateUser, createItem )
 
   router.get('/:id' ,getItem)
 
