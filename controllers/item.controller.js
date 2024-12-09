@@ -22,7 +22,27 @@ const getItems = async (req, res) => {
 
   const createItem = async (req, res) => {
     try {
-      const newItem = new Item(req.body);
+      const allowedFields = [
+        'name',
+        'serial_number',
+        'sku',
+        'description',
+        'condition',
+        'price',
+        'assigned_to',
+        'purchase_by',
+        'purchase_date',
+        'invoice',
+        'location',
+        'status',
+      ];
+      
+      const filteredBody = {};
+      allowedFields.forEach(field => {
+        if (req.body[field]) filteredBody[field] = req.body[field];
+      });
+  
+      const newItem = new Item(filteredBody);
       await newItem.save();
       await AuditLog.create({
         action: 'create',

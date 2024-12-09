@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const ItemSchema = mongoose.Schema({
         name:{
             type: String,
-            required : true, 
         },
         serial_number : {
             type : String,
