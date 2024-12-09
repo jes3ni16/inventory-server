@@ -5,9 +5,11 @@ const ItemSchema = mongoose.Schema({
             type: String,
             required : true, 
         },
+        serial_number : {
+            type : String,
+        },
       sku: {
         type: String,
-        required: false,
       },
 
         description :{
@@ -29,10 +31,7 @@ const ItemSchema = mongoose.Schema({
         invoice : {
             type: String,
         },
-        serial_number : {
-            type : String,
-            required: false,
-        },
+
         location : {
             type: String
         },
@@ -41,7 +40,6 @@ const ItemSchema = mongoose.Schema({
         },
         stockOutReason: { type: String, default: null },
         stockOutTimestamp: { type: Date, default: null },
-        tableUsed: { type: mongoose.Schema.Types.ObjectId, ref: 'Table', default: null },
 
 })
 
