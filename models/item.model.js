@@ -30,7 +30,8 @@ const ItemSchema = mongoose.Schema({
             type: String,
         },
         serial_number : {
-            type : String
+            type : String,
+            unique: true,
         },
         location : {
             type: String

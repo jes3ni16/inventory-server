@@ -20,8 +20,6 @@ const getItems = async (req, res) => {
 };
 
 
-
-
   const createItem = async (req, res) => {
     try {
       const newItem = new Item(req.body);
@@ -168,6 +166,8 @@ const getItems = async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   };
+
+
 
 
   module.exports = {getItems, createItem, getItem, updateItem, deleteItem, stockOutItem}
