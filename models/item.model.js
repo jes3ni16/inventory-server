@@ -41,8 +41,8 @@ const ItemSchema = mongoose.Schema({
         },
         stockOutReason: { type: String, default: null },
         stockOutTimestamp: { type: Date, default: null },
-
-})
+     
+},   { timestamps: true })
 
 const Item = mongoose.model("Item", ItemSchema);
 
