@@ -15,22 +15,24 @@ const mongoURI = process.env.MONGO_URI;
 // Middleware
 
 
+app.use(express.json());
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  })
+);
 app.use(
   session({
     secret: 'cenix',
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 3600000 }, // 1 hour expiry
+    cookie: { maxAge: 3600000 },
   })
 );
-app.use(cors({
-  origin: 'http://localhost:5173', // Allow your frontend origin
-  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true // Allow cookies or Authorization headers
-}));
 app.options('*', cors());
-app.use(express.json());
 // Routes
 app.use("/api/items", itemRoutes);
 app.use("/api/tables", tableRoutes);

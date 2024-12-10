@@ -24,29 +24,26 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+  console.log('Received request body:', req.body); // Debugging log
   if (req.method === 'POST') {
     const { username, password } = req.body;
 
     try {
-      // 1. Find the user by username
       const user = await User.findOne({ username });
       if (!user) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 
-      // 2. Compare the password with the hashed password stored in DB
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 
-      // 3. Set user information in server-side session
       req.session.user = {
         userId: user._id,
         username: user.username,
       };
 
-      // 4. Send success response
       res.status(200).json({ message: 'Login successful' });
     } catch (error) {
       console.error('Login error:', error);

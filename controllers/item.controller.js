@@ -65,7 +65,6 @@ const createItem = async (req, res) => {
     } else {
       console.warn('AuditLog skipped because req.user is not set.');
     }
-
     res.status(201).json(savedItem); // Return the newly saved item
   } catch (err) {
     console.error('Error creating item:', err);
@@ -79,14 +78,12 @@ const createItem = async (req, res) => {
 
   const getItem = async (req, res) => {
     try {
-      const { id } = req.params;  // Retrieve the item ID from the URL params
+      const { id } = req.params; 
       
       if (!id) {
         return res.status(400).json({ message: 'Item ID is required' });
       }
 
-    
-      // Fetch a specific item by its ID without populating the assigned_to field
       const item = await Item.findById(id).exec();
       
       if (!item) {
