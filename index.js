@@ -7,7 +7,7 @@ const tableRoutes = require('./routes/table.route');
 const transactionRoutes = require('./routes/transaction.route');
 const authRoutes = require('./routes/user.route');
 require('dotenv').config();
-
+const session = require('express-session');
 
 // MongoDB connection string
 const mongoURI = process.env.MONGO_URI;
