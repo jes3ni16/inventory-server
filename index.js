@@ -7,32 +7,21 @@ const tableRoutes = require('./routes/table.route');
 const transactionRoutes = require('./routes/transaction.route');
 const authRoutes = require('./routes/user.route');
 require('dotenv').config();
-const session = require('express-session');
+
 
 // MongoDB connection string
 const mongoURI = process.env.MONGO_URI;
 
 // Middleware
-
-
 app.use(express.json());
-app.use(
-  cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  })
-);
-app.use(
-  session({
-    secret: 'cenix',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 3600000 },
-  })
-);
-app.options('*', cors());
+app.use(cors({
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.options('*', cors());  // Preflight for all routes
+
+
 // Routes
 app.use("/api/items", itemRoutes);
 app.use("/api/tables", tableRoutes);
@@ -43,8 +32,6 @@ app.use('/api/auth', authRoutes);
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
-
-
 
 let isConnected = false;
 
