@@ -2,13 +2,15 @@ const mongoose = require('mongoose');
 
 const ItemSchema = mongoose.Schema({
         name:{
-            type: String,
+            type: String
         },
         serial_number : {
             type : String,
+            required: false,
         },
       sku: {
         type: String,
+        default: null,
       },
 
         description :{
