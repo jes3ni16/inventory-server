@@ -34,6 +34,15 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+app.use(
+  session({
+    secret: 'cenix',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 3600000 }, // 1 hour expiry
+  })
+);
+
 let isConnected = false;
 
 const connectToDatabase = async () => {
