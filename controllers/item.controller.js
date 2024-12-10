@@ -11,12 +11,7 @@ const getItems = async (req, res) => {
     const filter = assigned_to ? { assigned_to } : {};
     
     // Fetch items based on the filter
-    const items = await Item.find(filter)
-      .populate({
-        path: 'assigned_to',
-        select: 'employee', // Only fetch the name field for clarity
-      })
-      .exec();
+    const items = await Item.find(filter).populate('assigned_to').exec();
     
     res.status(200).json(items);
   } catch (error) {
