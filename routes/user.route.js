@@ -14,7 +14,7 @@ const isAuthenticated = (req, res, next) => {
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.post('/login', logoutUser);
+router.post('/logout', logoutUser);
 router.get('/protected', isAuthenticated, (req, res) => {
     res.status(200).json({ message: `Welcome ${req.session.user.username}` });
   });
