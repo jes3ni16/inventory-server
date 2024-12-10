@@ -18,46 +18,64 @@ const getItems = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch items' });
   }
 };
+const createItem = async (req, res) => {
+  try {
+    const {
+      sku,
+      name,
+      serial_number,
+      description,
+      condition,
+      price,
+      assigned_to,
+      purchase_by,
+      purchase_date,
+      invoice,
+      location,
+      status,
+    } = req.body;
 
+    // Create new item instance
+    const newItem = new Item({
+      sku,
+      name,
+      serial_number,
+      description,
+      condition,
+      price,
+      assigned_to,
+      purchase_by,
+      purchase_date,
+      invoice,
+      location,
+      status,
+    });
 
-  const createItem = async (req, res) => {
-    try {
-      const allowedFields = [
-        'name',
-        'serial_number',
-        'sku',
-        'description',
-        'condition',
-        'price',
-        'assigned_to',
-        'purchase_by',
-        'purchase_date',
-        'invoice',
-        'location',
-        'status',
-      ];
-      
-      const filteredBody = {};
-      allowedFields.forEach(field => {
-        if (req.body[field]) filteredBody[field] = req.body[field];
-      });
-  
-      const newItem = new Item(filteredBody);
-      await newItem.save();
+    // Save the item
+    const savedItem = await newItem.save();
+
+    // Log the audit (ensure req.user is available and authenticated)
+    if (req.user && req.user._id) {
       await AuditLog.create({
         action: 'create',
         model: 'Item',
-        modelId: newItem._id,
-        user: req.user._id, // Assuming req.user is correctly set from middleware
+        modelId: savedItem._id,
+        user: req.user._id,
       });
-  
-      res.status(201).json(newItem); // Return the newly added item
-    } catch (err) {
-      console.error("Error creating item:", err); // Detailed logging
-      res.status(500).json({ message: 'Error adding item', error: err.message });
+    } else {
+      console.warn('AuditLog skipped because req.user is not set.');
     }
-  };
-  
+
+    res.status(201).json(savedItem); // Return the newly saved item
+  } catch (err) {
+    console.error('Error creating item:', err);
+    res.status(500).json({
+      message: 'Error adding item',
+      error: err.message,
+    });
+  }
+};
+
 
   const getItem = async (req, res) => {
     try {
