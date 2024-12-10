@@ -17,7 +17,8 @@ app.use(express.json());
 app.use(cors({
   origin: '*', // Allow all origins
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }));
 app.options('*', cors());  // Preflight for all routes
 
