@@ -8,7 +8,7 @@ const { getAllTransactions } = require('../controllers/transaction.controller');
 
 
 // Route to create a new transaction
-router.get('/transactions', getAllTransactions);
+router.get('/', getAllTransactions);
 
 
 
