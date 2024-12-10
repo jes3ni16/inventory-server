@@ -3,6 +3,7 @@
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const session = require('express-session');
 
 const registerUser = async (req, res) => {
   const { username, password } = req.body;
@@ -39,23 +40,31 @@ const loginUser = async (req, res) => {
         return res.status(401).json({ error: 'Invalid credentials' });
       }
 
-      // 3. Create a JWT token after successful authentication
-      const token = jwt.sign(
-        { userId: user._id, username: user.username },
-        process.env.JWT_SECRET, // Ensure this is set in your environment variables
-        { expiresIn: '1h' } // Optional: set token expiration
-      );
+      // 3. Set user information in server-side session
+      req.session.user = {
+        userId: user._id,
+        username: user.username,
+      };
 
-      // 4. Send the token to the client
-      res.json({ token });
-
+      // 4. Send success response
+      res.status(200).json({ message: 'Login successful' });
     } catch (error) {
-      console.error('Login error:', error); // Log error for debugging
+      console.error('Login error:', error);
       res.status(500).json({ error: 'Server error, please try again later.' });
     }
   } else {
-    res.status(405).json({ error: 'Method Not Allowed' }); // Handle other HTTP methods
+    res.status(405).json({ error: 'Method Not Allowed' });
   }
 };
 
-module.exports = { registerUser, loginUser };
+const logoutUser = async (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ error: 'Error logging out' });
+    }
+
+    res.status(200).json({ message: 'Logged out successfully' });
+  });
+};
+
+module.exports = { registerUser, loginUser, logoutUser };

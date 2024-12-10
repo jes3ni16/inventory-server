@@ -22,6 +22,7 @@ app.use(cors({
 app.options('*', cors());  // Preflight for all routes
 
 
+
 // Routes
 app.use("/api/items", itemRoutes);
 app.use("/api/tables", tableRoutes);
