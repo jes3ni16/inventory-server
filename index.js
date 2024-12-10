@@ -14,6 +14,15 @@ const mongoURI = process.env.MONGO_URI;
 
 // Middleware
 app.use(express.json());
+
+app.use(
+  session({
+    secret: 'cenix',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 3600000 }, // 1 hour expiry
+  })
+);
 app.use(cors({
   origin: 'http://localhost:5173', // Allow all origins
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
@@ -35,14 +44,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.use(
-  session({
-    secret: 'cenix',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 3600000 }, // 1 hour expiry
-  })
-);
+
 
 let isConnected = false;
 
