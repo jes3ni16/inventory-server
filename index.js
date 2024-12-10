@@ -13,7 +13,7 @@ const session = require('express-session');
 const mongoURI = process.env.MONGO_URI;
 
 // Middleware
-app.use(express.json());
+
 
 app.use(
   session({
@@ -29,8 +29,8 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true // Allow cookies or Authorization headers
 }));
-
-
+app.options('*', cors());
+app.use(express.json());
 // Routes
 app.use("/api/items", itemRoutes);
 app.use("/api/tables", tableRoutes);
