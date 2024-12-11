@@ -43,7 +43,7 @@ const loginUser = async (req, res) => {
       const token = jwt.sign(
         { userId: user._id, username: user.username },
         process.env.JWT_SECRET, // Ensure this is set in your environment variables
-        { expiresIn: '1h' } // Optional: set token expiration
+        { expiresIn: '8h' } // Optional: set token expiration
       );
 
       // 4. Send the token to the client
